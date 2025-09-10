@@ -10,7 +10,7 @@ while(True):
     Selecione uma opção:
     [1] - Criar Arquivos
     [2] - Organizar Arquivos
-    [3] - Deletat Todos os arquivos
+    [3] - Deletar Todos os arquivos
     [4] - Sair do sistema
     """)
     option = int(input(""))
