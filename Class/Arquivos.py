@@ -1,5 +1,6 @@
 import os
 import random
+import shutil
 from reportlab.pdfgen import canvas
 from Utils.gerarNomeArquivo import gerarNomeArquivo
 
@@ -27,7 +28,7 @@ class Arquivos:
             os.makedirs(f"arquivos/{pasta}", exist_ok=True)
         print(f"Pastas criadas: {self.pastas}")
 
-    def criarArquivos(self, qtd):
+    def criarArquivos(self, qtd = 3):
         self.criarPastas()
         for _ in range(qtd):
             pasta_aleatoria = random.choice(self.pastas)
@@ -39,6 +40,43 @@ class Arquivos:
                 self.criarArquivoXML(pasta_aleatoria)
             elif (i == 3): 
                 self.criarArquivoTXT(pasta_aleatoria)
+    
+
+    def organizarArquivos(self):
+        base_dir = "arquivos"
+        self.criarPastas()
+
+        for pasta in self.pastas:
+            caminho_pasta = os.path.join(base_dir, pasta)
+
+            for arquivo in os.listdir(caminho_pasta):
+                caminho_arquivo = os.path.join(caminho_pasta, arquivo)
+
+                if os.path.isdir(caminho_arquivo):
+                    continue
+
+                if arquivo.endswith(".pdf"):
+                    destino = os.path.join(base_dir, "pdfs", arquivo)
+                elif arquivo.endswith(".xml"):
+                    destino = os.path.join(base_dir, "xmls", arquivo)
+                elif arquivo.endswith(".txt"):
+                    destino = os.path.join(base_dir, "txts", arquivo)
+                else:
+                    continue 
+
+                if caminho_arquivo != destino:
+                    os.makedirs(os.path.dirname(destino), exist_ok=True)
+                    os.rename(caminho_arquivo, destino)
+                    print(f"Movido: {arquivo} → {destino}")
+    
+    def deletarTudo(self):
+        base_dir = "arquivos"
+
+        if os.path.exists(base_dir):
+            shutil.rmtree(base_dir)
+            print(f"Toda a pasta '{base_dir}' e seu conteúdo foram deletados.")
+        else:
+            print("A pasta 'arquivos' não existe.")
 
 
 
